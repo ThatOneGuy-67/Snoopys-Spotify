@@ -53,12 +53,6 @@
                         <p class="box-p2">It's easy, we'll help you</p>
                         <button class="badge">Create playlist</button>
                     </div>
-                    <!-- box 2 -->
-                    <div class="box">
-                        <p class="box-p1">Lets find some podcast to follow</p>
-                        <p class="box-p2">We'll keep you updated on new episodes</p>
-                        <button class="badge">Browse podcast</button>
-                    </div>
                     <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
                 </div>
             </div>
@@ -90,11 +84,6 @@
                         <p class="card-title">Top 50 - Global</p>
                         <p class="card-info">Your daily update of the most played tracks ...</p>
                     </div>
-                    <div class="card">
-                        <img src="assets/card8img.jpg" class="card-img" alt="">
-                        <p class="card-title">The Weeknd</p>
-                        <p class="card-info">Trending tracks of  Weeknd this week ...</p>
-                    </div>
                 </div>
                 <!-- Footer -->
                 <div class="footer">
@@ -111,11 +100,11 @@
         <div class="music-player">
             <div class="album">
                 <div class="album-cover">
-                    <img src="assets/EX.jpg" class="track-cover" alt="">
+                    <img src="assets/EX.jpg" class="track-cover" id="cover" alt="">
                 </div>
                 <div class="album-info">
-                <p class="track-title">Blank</p>
-                <p class="track-dis">Blank  </p>
+                <p class="track-title" id="title">Blank</p>
+                <p class="track-dis" id="artist">Blank</p>
                 </div>
                 <div class="album-options hide2">
                     <i class="fa-regular fa-heart album-options-icon"></i>
@@ -125,16 +114,18 @@
             </div>
             <div class="player">
                 <div class="player-controls">
-                    <img src="assets/player_icon1.png" class="player-control-icon" alt="">
-                    <img src="assets/player_icon2.png" class="player-control-icon" alt="">
-                    <img src="assets/player_icon3.png" class="player-control-icon" alt="" style="opacity: 1; height:2rem;">
-                    <img src="assets/player_icon4.png" class="player-control-icon" alt="">
-                    <img src="assets/player_icon5.png" class="player-control-icon" alt="">
+                    <img src="assets/player_icon1.png" class="player-control-icon">
+                    <img src="assets/player_icon2.png" class="player-control-icon" id="prev">
+                    <!-- PLAY BUTTON -->
+                    <img src="assets/player_icon3.png" class="player-control-icon" id="play" style="opacity: 1; height:2rem;">
+                    <!-- NEXT BUTTON -->
+                    <img src="assets/player_icon4.png" class="player-control-icon" id="next">
+                    <img src="assets/player_icon5.png" class="player-control-icon">
                 </div>
                 <div class="progress">
-                    <span class="curr-time">00:00</span>
-                    <input type="range" min="0" max="100" class="progress-bar" step="1">
-                    <span class="tot-time">3:33</span>
+                    <span class="curr-time" id="currentTime">0:00</span>
+                    <input type="range" min="0" max="100" class="progress-bar" id="progress">
+                    <span class="tot-time" id="duration">0:00</span>        
                 </div>
             </div>
             <div class="controls">
@@ -159,6 +150,133 @@
         });
       </script>
     <!-- Loader Code -->
+
+
+    <script>
+        // 🎵 EDIT SONG PATHS ONLY
+        const songs = [
+        { title: "California Girls", artist: "Snoop Dogg/Katy Perry", src: "music/California Gurls.mp3", cover:"assets/Cal.jpg" },
+        { title: "Never Gonna Give U Up", artist: "Rick", src: "music/Never Gonna Give You Up.mp3", cover:"assets/rick.jpg" },
+        { title: "Crank That", artist: "Soulja Boy", src: "music/Crank That.mp3", cover:"assets/SB.jpg" },
+        { title: "Stand by me", artist: "Ben King", src: "music/Stand by me.mp3", cover:"assets/Stan.jpg" },
+        { title: "Steve's Lava", artist: "Mojang", src: "music/Steve's Lava Chicken.mp3", cover:"assets/MM.jpg" },
+        ];
+
+        let currentSong = 0;
+        const audio = new Audio();
+
+        // 🎯 GET YOUR EXISTING ELEMENTS
+        const playBtn = document.getElementById("play");
+        const nextBtn = document.getElementById("next");
+        const prevBtn = document.getElementById("prev");
+        const progress = document.getElementById("progress");
+
+        const title = document.getElementById("title");
+        const cover = document.getElementById("cover");
+        const artist = document.getElementById("artist");
+        const currentTimeEl = document.getElementById("currentTime");
+        const durationEl = document.getElementById("duration");
+
+        // 🎯 ICON PATHS (MATCH YOUR ASSETS FOLDER)
+        const playIcon = "assets/player_icon3.png";
+        const pauseIcon = "assets/pauseb.png";
+
+        // ▶️ LOAD SONG
+        function loadSong(index) {
+        const song = songs[index];
+        audio.src = song.src;
+
+        if (title) title.textContent = song.title;
+        if (artist) artist.textContent = song.artist;
+
+        // 🎨 CHANGE COVER
+        if (cover) cover.src = song.cover;
+        }
+
+        // ▶️ PLAY
+        function playSong() {
+        audio.play();
+        if (playBtn.tagName === "IMG") playBtn.src = pauseIcon;
+        }
+
+        // ⏸ PAUSE
+        function pauseSong() {
+        audio.pause();
+        if (playBtn.tagName === "IMG") playBtn.src = playIcon;
+        }
+
+        // 🔘 PLAY CLICK
+        if (playBtn) {
+        playBtn.addEventListener("click", () => {
+            if (audio.paused) {
+            playSong();
+            } else {
+            pauseSong();
+            }
+        });
+        }
+
+        // ⏭ NEXT
+        if (nextBtn) {
+        nextBtn.addEventListener("click", () => {
+            currentSong = (currentSong + 1) % songs.length;
+            loadSong(currentSong);
+            playSong();
+        });
+        }
+
+        // ⏮ PREV
+        if (prevBtn) {
+        prevBtn.addEventListener("click", () => {
+            currentSong = (currentSong - 1 + songs.length) % songs.length;
+            loadSong(currentSong);
+            playSong();
+        });
+        }
+
+        // ⏱ UPDATE PROGRESS + TIME
+        audio.addEventListener("timeupdate", () => {
+        if (!audio.duration) return;
+
+        if (progress) {
+            progress.value = (audio.currentTime / audio.duration) * 100;
+        }
+
+        if (currentTimeEl) {
+            currentTimeEl.textContent = formatTime(audio.currentTime);
+        }
+
+        if (durationEl) {
+            durationEl.textContent = formatTime(audio.duration);
+        }
+        });
+
+        // 🎚 SEEK
+        if (progress) {
+        progress.addEventListener("input", () => {
+            if (audio.duration) {
+            audio.currentTime = (progress.value / 100) * audio.duration;
+            }
+        });
+        }
+
+        // 🔁 AUTO NEXT
+        audio.addEventListener("ended", () => {
+        if (nextBtn) nextBtn.click();
+        });
+
+        // 🕒 FORMAT TIME
+        function formatTime(time) {
+        if (isNaN(time)) return "0:00";
+
+        const minutes = Math.floor(time / 60);
+        const seconds = Math.floor(time % 60);
+        return minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+        }
+
+        // 🚀 INIT
+        loadSong(currentSong);
+    </script>
 
 </body>
 </html>
