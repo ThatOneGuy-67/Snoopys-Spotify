@@ -196,7 +196,11 @@
         // ▶️ PLAY
         function playSong() {
         audio.play();
+
         if (playBtn.tagName === "IMG") playBtn.src = pauseIcon;
+
+        // ✅ CHANGE COVER ONLY WHEN PLAYING
+        if (cover) cover.src = songs[currentSong].cover;
         }
 
         // ⏸ PAUSE
@@ -234,31 +238,41 @@
         });
         }
 
-        // ⏱ UPDATE PROGRESS + TIME
+        audio.addEventListener("loadedmetadata", () => {
+        // reset progress
+        progress.value = 0;
+
+        // reset bar color
+        progress.style.background = "#444";
+
+        // set correct duration text
+        durationEl.textContent = formatTime(audio.duration);
+        });
+
         audio.addEventListener("timeupdate", () => {
         if (!audio.duration) return;
 
-        if (progress) {
-            progress.value = (audio.currentTime / audio.duration) * 100;
-        }
+        const percent = (audio.currentTime / audio.duration) * 100;
 
-        if (currentTimeEl) {
-            currentTimeEl.textContent = formatTime(audio.currentTime);
-        }
+        progress.value = percent;
 
-        if (durationEl) {
-            durationEl.textContent = formatTime(audio.duration);
-        }
+        // 🔥 THIS CONTROLS THE GREEN BAR
+        progress.style.background = `linear-gradient(to right, #1db954 ${percent}%, #444 ${percent}%)`;
+
+        currentTimeEl.textContent = formatTime(audio.currentTime);
+        durationEl.textContent = formatTime(audio.duration);
         });
 
-        // 🎚 SEEK
-        if (progress) {
+        // seek
         progress.addEventListener("input", () => {
-            if (audio.duration) {
-            audio.currentTime = (progress.value / 100) * audio.duration;
-            }
-        });
+        const percent = progress.value;
+
+        progress.style.background = `linear-gradient(to right, #1db954 ${percent}%, #444 ${percent}%)`;
+
+        if (audio.duration) {
+            audio.currentTime = (percent / 100) * audio.duration;
         }
+        });
 
         // 🔁 AUTO NEXT
         audio.addEventListener("ended", () => {
@@ -272,6 +286,17 @@
         const minutes = Math.floor(time / 60);
         const seconds = Math.floor(time % 60);
         return minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+        }
+
+        function loadSong(index) {
+        const song = songs[index];
+        audio.src = song.src;
+
+        if (title) title.textContent = song.title;
+        if (artist) artist.textContent = song.artist;
+
+        // ❌ REMOVE THIS LINE:
+        // cover.src = song.cover;
         }
 
         // 🚀 INIT
