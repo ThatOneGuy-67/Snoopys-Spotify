@@ -395,39 +395,29 @@ a:hover {
 }
 
 .progress-bar {
-    width: 60%;
-    /* height: 4px; */
-    appearance: none;
-    cursor: pointer;
-    border-radius: 100px;
+  appearance: none;
+  width: 60%;
+  border-radius: 5px;
+  height: 5px;
+  background: #444; /* base color */
 }
 
-
+/* TRACK */
 .progress-bar::-webkit-slider-runnable-track {
-    background: linear-gradient(to right, #1bd760 50%, #ddd 50%);
-    border-radius: 100px;
-    height: 0.2rem;
+  height: 5px;
+  border-radius: 5px;
+  background: transparent; /* IMPORTANT */
 }
 
-.progress-bar::-webkit-slider-runnable-track:hover {
-    background-color: #1bd760;
-}
-
+/* THUMB */
 .progress-bar::-webkit-slider-thumb {
-    appearance: none;
-    width: 0.6rem;
-    height: 0.6rem;
-    border-radius: 50%;
-    background-color: #1bd760;
-    margin-top: -3px;
-}
-.progress-bar::-webkit-slider-thumb:hover {
-    appearance: none;
-    width: 0.7rem;
-    height: 0.7rem;
-    border-radius: 50%;
-    background-color: #ffffff;
-    margin-top: -4px;
+  appearance: none;
+  height: 12px;
+  width: 12px;
+  background: #1db954;
+  border-radius: 50%;
+  cursor: pointer;
+  margin-top: -3.5px;
 }
 
 @media (max-width: 800px) {
@@ -632,3 +622,5 @@ a:hover {
     50% { opacity: 1; }
   }
 /* Loader Style */
+
+
