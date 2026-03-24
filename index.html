@@ -79,14 +79,14 @@
             <div class="cards">
                 <h2>Recently Played</h2>
                 <div class="card-container">
-                    <div class="card">
+                    <div class="card" id="tupac">
                         <img src="assets/2pac.jpg" class="card-img" alt="">
                         <p class="card-title">2Pac</p>
                         <p class="card-info">2Pac songs, I think all songs...</p>
                     </div>
                 </div>
                 <div class="card-container">
-                    <div class="card">
+                    <div class="card" id="global">
                         <img src="assets/card1img.jpeg" class="card-img" alt="">
                         <p class="card-title">Top 50 - Global</p>
                         <p class="card-info">Your daily update of the most played tracks ...</p>
@@ -160,15 +160,24 @@
 
 
     <script>
-        // 🎵 EDIT SONG PATHS ONLY
-        const songs = [
-        { title: "California Girls", artist: "Snoop Dogg/Katy Perry", src: "music/California Gurls.mp3", cover:"assets/Cal.jpg" },
-        { title: "Never Gonna Give U Up", artist: "Rick", src: "music/Never Gonna Give You Up.mp3", cover:"assets/rick.jpg" },
-        { title: "Crank That", artist: "Soulja Boy", src: "music/Crank That.mp3", cover:"assets/SB.jpg" },
-        { title: "Stand by me", artist: "Ben King", src: "music/Stand by me.mp3", cover:"assets/Stan.jpg" },
-        { title: "Steve's Lava", artist: "Mojang", src: "music/Steve's Lava Chicken.mp3", cover:"assets/MM.jpg" },
-        ];
+        const playlists = {
+        global: [
+            { title: "California Girls", artist: "Snoop Dogg/Katy Perry", src: "music/California Gurls.mp3", cover:"assets/Cal.jpg" },
+            { title: "Never Gonna Give U Up", artist: "Rick", src: "music/Never Gonna Give You Up.mp3", cover:"assets/rick.jpg" },
+            { title: "Crank That", artist: "Soulja Boy", src: "music/Crank That.mp3", cover:"assets/SB.jpg" },
+            { title: "Stand by me", artist: "Ben King", src: "music/Stand by me.mp3", cover:"assets/Stan.jpg" },
+            { title: "Steve's Lava", artist: "Mojang", src: "music/Steve's Lava Chicken.mp3", cover:"assets/MM.jpg" },
+        ],
+        tupac: [
+            { title: "Blank", artist: "2Pac", src: "music/Blank.mp3", cover:"assets/BLank.jpg" },
+            { title: "Blank", artist: "2Pac", src: "music/Blank.mp3", cover:"assets/BLank.jpg" },
+            { title: "Blank", artist: "2Pac", src: "music/Blank.mp3", cover:"assets/BLank.jpg" },
+            { title: "Blank", artist: "2Pac", src: "music/Blank.mp3", cover:"assets/BLank.jpg" },
+            
+        ]//{ title: "Blank", artist: "2Pac", src: "music/Blank.mp3", cover:"assets/BLank.jpg" },
+        };
 
+        let currentPlaylist = playlists.global;
         let currentSong = 0;
         const audio = new Audio();
 
@@ -230,7 +239,7 @@
         // ⏭ NEXT
         if (nextBtn) {
         nextBtn.addEventListener("click", () => {
-            currentSong = (currentSong + 1) % songs.length;
+            currentSong = (currentSong + 1) % currentPlaylist.length;
             loadSong(currentSong);
             playSong();
         });
@@ -239,7 +248,7 @@
         // ⏮ PREV
         if (prevBtn) {
         prevBtn.addEventListener("click", () => {
-            currentSong = (currentSong - 1 + songs.length) % songs.length;
+           currentSong = (currentSong - 1) % currentPlaylist.length;
             loadSong(currentSong);
             playSong();
         });
@@ -296,18 +305,41 @@
         }
 
         function loadSong(index) {
-        const song = songs[index];
+        const song = currentPlaylist[index];
         audio.src = song.src;
 
         if (title) title.textContent = song.title;
         if (artist) artist.textContent = song.artist;
+        if (cover) cover.src = song.cover;
 
-        // ❌ REMOVE THIS LINE:
-        // cover.src = song.cover;
+        progress.value = 0;
+        progress.style.background = "#444";
         }
 
         // 🚀 INIT
         loadSong(currentSong);
+        // 🎶 CARD CLICK HANDLERS
+
+        const globalCard = document.getElementById("global");
+        const tupacCard = document.getElementById("tupac");
+
+        if (globalCard) {
+        globalCard.addEventListener("click", () => {
+            currentPlaylist = playlists.global;
+            currentSong = 0;
+            loadSong(currentSong);
+            playSong();
+        });
+        }
+
+        if (tupacCard) {
+        tupacCard.addEventListener("click", () => {
+            currentPlaylist = playlists.tupac;
+            currentSong = 0;
+            loadSong(currentSong);
+            playSong();
+        });
+        }
     </script>
 
 </body>
