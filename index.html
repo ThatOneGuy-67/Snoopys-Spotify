@@ -29,335 +29,358 @@
                     <i class="fa-solid fa-house"></i>
                     <a href="#" class="home">Home</a>
                 </div>
-                <div class="nav-option">
+                <div class="nav-option search-nav">
                     <i class="fa-solid fa-magnifying-glass"></i>
                     <a href="#" class="search">Search</a>
                 </div>
             </div>
-            <!-- library -->
             <div class="library">
                 <div class="options">
-                    <div class="lib-option nav-option">
-                        <img src="assets/library_icon.png" alt="">
-                        <a href="#" class="home">Your Library</a>
-                    </div>
-                    <div class="icons">
-                        <i class="fa-solid fa-plus"></i>
-                        <i class="fa-solid fa-arrow-right"></i>
-                    </div>
+                    <div class="lib-option nav-option"><img src="assets/library_icon.png" alt=""><a href="#" class="home">Your Library</a></div>
+                    <div class="icons"><i class="fa-solid fa-plus" id="createPlaylist" title="Create playlist" role="button" tabindex="0"></i><i class="fa-solid fa-arrow-right" id="openQueue" title="Open queue" role="button" tabindex="0"></i></div>
                 </div>
-                <div class="lib-box">
-                    <!-- box 1 -->
-                    <div class="box">
-                        <p class="box-p1">Create your first playlist</p>
-                        <p class="box-p2">It's easy, we'll help you</p>
-                        <button class="badge">Create playlist</button>
-                    </div>
-                    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-                </div>
+                <div class="lib-box"><div class="box"><p class="box-p1">Create your first playlist</p><p class="box-p2">It's easy, we'll help you</p><button class="badge" id="createPlaylistButton">Create playlist</button></div><div id="libraryList" class="library-list"></div></div>
             </div>
         </div>
 
-        <!-- main-content -->
         <div class="main-content">
-            <!-- Nav bar -->
             <div class="sticky-nav">
                 <div class="sticky-nav-icons">
-                    <img src="assets/backward_icon.png" alt="">
-                <img src="assets/forward_icon.png" class="hide" alt="">
+                    <img src="assets/backward_icon.png" alt="Back">
+                    <img src="assets/forward_icon.png" class="hide" alt="Forward">
+                </div>
+                <div class="search-box" id="searchBox">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input id="searchInput" type="search" placeholder="Search songs or artists" aria-label="Search songs or artists">
                 </div>
                 <div class="sticky-nav-options">
-                <button class="badge nav-item hide" id="songR">Song Request</button>
-                <!-- <i class="fa-regular fa-user nav-item"></i> -->
-                <a href="https://github.com/ThatOneGuy-67" target="_blank">
-                    <i class="fa-regular fa-user nav-item"></i>
-                </a>
+                    <button class="badge nav-item hide" id="songR">Song Request</button>
+                    <a href="https://github.com/ThatOneGuy-67" target="_blank" rel="noreferrer"><i class="fa-regular fa-user nav-item"></i></a>
                 </div>
-                
-            <!-- Cards ( Playlist cards)  -->
             </div>
             <div class="cards">
-                <h2>Recently Played</h2>
-                <div class="card-container">
-                    <div class="card" id="global">
-                        <img src="assets/card1img.jpeg" class="card-img" alt="">
-                        <p class="card-title">Top 50 - Global</p>
-                        <p class="card-info">Your daily update of the most played tracks ...</p>
-                    </div>
-                     <div class="card" id="tupac">
-                        <img src="assets/2pac.jpg" class="card-img" alt="">
-                        <p class="card-title">2Pac</p>
-                        <p class="card-info">2Pac songs, I think all songs...</p>
+                <div id="homeContent">
+                    <h2>Recently Played</h2>
+                    <div class="card-container">
+                        <div class="card" id="global"><img src="assets/card1img.jpeg" class="card-img" alt="Global playlist"><p class="card-title">Top 50 - Global</p><p class="card-info">Your daily update of the most played tracks ...</p></div>
+                        <div class="card" id="tupac"><img src="assets/2pac.jpg" class="card-img" alt="2Pac playlist"><p class="card-title">2Pac</p><p class="card-info">2Pac songs, I think all songs...</p></div>
                     </div>
                 </div>
-                <!-- Footer -->
-                <div class="footer">
-                    <div class="line"></div>
+                <div id="homeView">
+                    <div id="searchResults" class="search-results" aria-live="polite"></div>
                 </div>
-                <div class="credits">
-                    <p class="made">Made by ThatOneGuy</p> 
-                    <p class="desc">It's a Spotify clone built for educational purposes.</p>
-                </div>
+                <section id="searchPage" class="search-page" aria-labelledby="searchPageTitle">
+                    <div class="search-page-heading"><button id="closeSearch" class="back-button"><i class="fa-solid fa-arrow-left"></i> Home</button><span class="eyebrow">Search your library</span><h2 id="searchPageTitle">What do you want to hear?</h2><p>Search by song title or artist.</p></div>
+                    <div id="searchPageResults" class="search-page-results" aria-live="polite"></div>
+                </section>
+                <section id="playlistPage" class="playlist-page" aria-live="polite"></section>
+                <aside id="queuePanel" class="queue-panel" aria-label="Queue"><div class="queue-heading"><h3>Queue</h3><button id="closeQueue" aria-label="Close queue">&times;</button></div><div id="queueList"></div></aside>
+                <div class="footer"><div class="line"></div></div>
+                <div class="credits"><p class="made">Made by ThatOneGuy</p><p class="desc">It's a Spotify clone built for educational purposes.</p></div>
             </div>
         </div>
 
-        <!-- Music Player -->
         <div class="music-player">
-            <div class="album">
-                <div class="album-cover">
-                    <img src="assets/EX.jpg" class="track-cover" id="cover" alt="">
-                </div>
-                <div class="album-info">
-                <p class="track-title" id="title">Blank</p>
-                <p class="track-dis" id="artist">Blank</p>
-                </div>
-                <div class="album-options hide2">
-                    <i class="fa-regular fa-heart album-options-icon"></i>
-                    <i class="fa-regular fa-bookmark album-options-icon"></i>
-                </div>
-                
-            </div>
-            <div class="player">
-                <div class="player-controls">
-                    <img src="assets/player_icon1.png" class="player-control-icon">
-                    <img src="assets/player_icon2.png" class="player-control-icon" id="prev">
-                    <!-- PLAY BUTTON -->
-                    <img src="assets/play_musicbar.png" class="player-control-icon" id="play" style="opacity: 1; height:2rem;">
-                    <!-- NEXT BUTTON -->
-                    <img src="assets/player_icon4.png" class="player-control-icon" id="next">
-                    <img src="assets/player_icon5.png" class="player-control-icon">
-                </div>
-                <div class="progress">
-                    <span class="curr-time" id="currentTime">0:00</span>
-                    <input type="range" min="0" max="100" class="progress-bar" id="progress">
-                    <span class="tot-time" id="duration">0:00</span>        
-                </div>
-            </div>
-            <div class="controls">
-                <i class="fa-solid fa-file-audio controls-icon"></i>
-                <i class="fa-solid fa-microphone controls-icon"></i>
-                <i class="fa-solid fa-bars controls-icon"></i>
-                <i class="fa-solid fa-mobile controls-icon"></i>
-                <i class="fa-solid fa-volume-low controls-icon"></i>
-                <input type="range" min="0" max="100" class="volume" step="1">
-                <i class="fa-solid fa-expand controls-icon"></i>
-            </div>
+            <div class="album"><div class="album-cover"><img src="assets/EX.jpg" class="track-cover" id="cover" alt="Current track"></div><div class="album-info"><p class="track-title" id="title">Blank</p><p class="track-dis" id="artist">Blank</p></div><div class="album-options hide2"><i class="fa-regular fa-heart album-options-icon" id="likeBtn" title="Save to library" role="button" tabindex="0"></i><i class="fa-regular fa-bookmark album-options-icon" id="queueBtn" title="Add to queue" role="button" tabindex="0"></i></div></div>
+            <div class="player"><div class="player-controls"><img src="assets/player_icon1.png" class="player-control-icon" id="shuffle" title="Shuffle"><img src="assets/player_icon2.png" class="player-control-icon" id="prev" title="Previous"><img src="assets/play_musicbar.png" class="player-control-icon" id="play" style="opacity: 1; height:2rem;" title="Play"><img src="assets/player_icon4.png" class="player-control-icon" id="next" title="Next"><img src="assets/player_icon5.png" class="player-control-icon" id="repeat" title="Repeat"></div><div class="progress"><span class="curr-time" id="currentTime">0:00</span><input type="range" min="0" max="100" value="0" class="progress-bar" id="progress" aria-label="Seek"><span class="tot-time" id="duration">0:00</span></div></div>
+            <div class="controls"><i class="fa-solid fa-volume-low controls-icon" id="muteBtn" title="Mute"></i><input type="range" min="0" max="100" value="80" class="volume" id="volume" step="1" aria-label="Volume"><i class="fa-solid fa-expand controls-icon" id="fullscreenBtn" title="Fullscreen" role="button" tabindex="0"></i></div>
         </div>
     </div>
 
+    <div id="playlistDialog" class="playlist-dialog" hidden>
+        <form id="playlistForm" class="playlist-form">
+            <button type="button" id="cancelPlaylist" class="dialog-close" aria-label="Close">&times;</button>
+            <span class="eyebrow">Your library</span>
+            <h2>Create playlist</h2>
+            <label for="playlistName">Name</label>
+            <input id="playlistName" required maxlength="40" placeholder="Late night drive">
+            <label for="playlistColor">Accent color</label>
+            <input id="playlistColor" type="color" value="#1db954" aria-label="Playlist accent color">
+            <button class="badge" type="submit">Create</button>
+        </form>
+    </div>
 
-    <!-- Loader Code -->
-    <script>
-        window.addEventListener('load', () => {
-          const loader = document.getElementById('loader');
-          loader.classList.add('hidden');
-          setTimeout(() => loader.remove(), 600);
-        });
-      </script>
-    <!-- Loader Code -->
+    <div id="saveDialog" class="playlist-dialog" hidden>
+        <form id="saveForm" class="playlist-form">
+            <button type="button" id="cancelSave" class="dialog-close" aria-label="Close">&times;</button>
+            <span class="eyebrow">Save track</span>
+            <h2>Add to playlist</h2>
+            <label for="savePlaylist">Choose a playlist</label>
+            <select id="savePlaylist" required></select>
+            <button class="badge" type="submit">Save song</button>
+        </form>
+    </div>
 
     <script>
-        document.getElementById("songR").onclick = () => {
-        window.open("https://forms.gle/NuZYJtDK5CZHkPyE8", "_blank");
-        };
+        const loader = document.getElementById("loader");
+        if (loader) {
+            loader.classList.add("hidden");
+            setTimeout(() => loader.remove(), 600);
+        }
+        document.getElementById("songR").onclick = () => window.open("https://forms.gle/NuZYJtDK5CZHkPyE8", "_blank");
     </script>
 
     <script>
         const playlists = {
-        global: [
-            { title: "California Girls", artist: "Snoop Dogg/Katy Perry", src: "music/California Gurls.mp3", cover:"assets/Cal.jpg" },
-            { title: "Never Gonna Give U Up", artist: "Rick", src: "music/Never Gonna Give You Up.mp3", cover:"assets/rick.jpg" },
-            { title: "Crank That", artist: "Soulja Boy", src: "music/Crank That.mp3", cover:"assets/SB.jpg" },
-            { title: "Stand by me", artist: "Ben King", src: "music/Stand by me.mp3", cover:"assets/Stan.jpg" },
-            { title: "Steve's Lava", artist: "Mojang", src: "music/Steve's Lava Chicken.mp3", cover:"assets/MM.jpg" },
-            { title: "Murder business", artist: "Young Boy", src: "music/Murder business -YoungBoy.mp3", cover:"assets/YB.jpg" },
-            { title: "Hot Now", artist: "Young Boy", src: "music/Hot Now -YoungBoy.mp3", cover:"assets/YB2.jpg" },
-        ],
-        tupac: [
-            { title: "California Love (remix)", artist: "2Pac", src: "music/California Love (remix) (ft. Dr. Dre, Roger Troutman) - Remix.mp3" },
-            { title: "Bomb First", artist: "2Pac", src: "music/Bomb First (My Second Reply).mp3" },
-            { title: "Can_t C Me", artist: "2Pac", src: "music/Can_t C Me.mp3" },
-            { title: "Definition Of A Thug Nigga", artist: "2Pac", src: "music/Definition Of A Thug Nigga.mp3" },
-            { title: "Ambitionz Az A Ridah", artist: "2Pac", src: "music/Ambitionz Az A Ridah.mp3" },
-            { title: "Ain_t Hard 2 Find", artist: "2Pac", src: "music/Ain_t Hard 2 Find (ft. B-Legit, C-BO, E-40, Richie Rich).mp3" },
-            { title: "Blasphemy", artist: "2Pac", src: "music/Blasphemy.mp3" },
-            { title: "Can U Get Away", artist: "2Pac", src: "music/Can U Get Away.mp3" },
-            { title: "Dear Mama", artist: "2Pac", src: "music/Dear Mama.mp3" },
-            { title: "Death Around The Corner", artist: "2Pac", src: "music/Death Around The Corner.mp3" },
-            { title: "All About U", artist: "2Pac", src: "music/All About U (ft. Nate Dogg, Snoop Dogg, Fatal, Yani Hadati).mp3" },
-            { title: "Check Out Time", artist: "2Pac", src: "music/Check Out Time.mp3" },
-            { title: "All Eyez On Me", artist: "2Pac", src: "music/All Eyez On Me (ft. Big Syke).mp3" },
-            { title: "Black Starry Night", artist: "2Pac", src: "music/Black Starry Night (Interlude).mp3" },
-            { title: "Against All Odds", artist: "2Pac", src: "music/Against All Odds.mp3" },
-            { title: "16 On Death Row", artist: "2Pac", src: "music/16 On Death Row.mp3" },
-            { title: "2 Of Amerikaz Most Wanted", artist: "2Pac", src: "music/2 Of Amerikaz Most Wanted (ft. Snoop Doggy Dogg).mp3" },
-
-        ]//{ title: "Blank", artist: "2Pac", src: "music/Blank.mp3" },
+            global: [
+                { title: "California Girls", artist: "Snoop Dogg/Katy Perry", src: "music/California Gurls.mp3", cover: "assets/Cal.jpg" },
+                { title: "Never Gonna Give U Up", artist: "Rick Astley", src: "music/Never Gonna Give You Up.mp3", cover: "assets/rick.jpg" },
+                { title: "Crank That", artist: "Soulja Boy", src: "music/Crank That.mp3", cover: "assets/SB.jpg" },
+                { title: "Stand by me", artist: "Ben King", src: "music/Stand by me.mp3", cover: "assets/Stan.jpg" },
+                { title: "Steve's Lava", artist: "Mojang", src: "music/Steve's Lava Chicken.mp3", cover: "assets/MM.jpg" },
+                { title: "Murder business", artist: "Young Boy", src: "music/Murder business -YoungBoy.mp3", cover: "assets/YB.jpg" },
+                { title: "Hot Now", artist: "Young Boy", src: "music/Hot Now -YoungBoy.mp3", cover: "assets/YB2.jpg" }
+            ],
+            tupac: [
+                { title: "California Love (remix)", artist: "2Pac", src: "music/California Love (remix) (ft. Dr. Dre, Roger Troutman) - Remix.mp3", cover: "assets/2pac.jpg" },
+                { title: "Bomb First", artist: "2Pac", src: "music/Bomb First (My Second Reply).mp3", cover: "assets/2pac.jpg" },
+                { title: "Can_t C Me", artist: "2Pac", src: "music/Can_t C Me.mp3", cover: "assets/2pac.jpg" },
+                { title: "Definition Of A Thug Nigga", artist: "2Pac", src: "music/Definition Of A Thug Nigga.mp3", cover: "assets/2pac.jpg" },
+                { title: "Ambitionz Az A Ridah", artist: "2Pac", src: "music/Ambitionz Az A Ridah.mp3", cover: "assets/2pac.jpg" },
+                { title: "Dear Mama", artist: "2Pac", src: "music/Dear Mama.mp3", cover: "assets/2pac.jpg" },
+                { title: "All Eyez On Me", artist: "2Pac", src: "music/All Eyez On Me (ft. Big Syke).mp3", cover: "assets/2pac.jpg" }
+            ]
         };
-
+        const allSongs = [...playlists.global, ...playlists.tupac];
+        const audio = new Audio();
+        const $ = (id) => document.getElementById(id);
+        const playBtn = $("play");
+        const progress = $("progress");
+        const title = $("title");
+        const artist = $("artist");
+        const cover = $("cover");
+        const currentTime = $("currentTime");
+        const duration = $("duration");
         let currentPlaylist = playlists.global;
         let currentSong = 0;
-        const audio = new Audio();
+        let queue = JSON.parse(localStorage.getItem("snoopys-queue") || "[]");
+        let shuffle = false;
+        let repeat = false;
+        let saved = JSON.parse(localStorage.getItem("snoopys-saved") || "[]");
+        let userPlaylists = JSON.parse(localStorage.getItem("snoopys-playlists") || "[]");
+        const savedVolume = Number(localStorage.getItem("snoopys-volume"));
 
-        // 🎯 GET YOUR EXISTING ELEMENTS
-        const playBtn = document.getElementById("play");
-        const nextBtn = document.getElementById("next");
-        const prevBtn = document.getElementById("prev");
-        const progress = document.getElementById("progress");
+        function formatTime(value) {
+            if (!Number.isFinite(value)) return "0:00";
+            return `${Math.floor(value / 60)}:${String(Math.floor(value % 60)).padStart(2, "0")}`;
+        }
 
-        const title = document.getElementById("title");
-        const cover = document.getElementById("cover");
-        const artist = document.getElementById("artist");
-        const currentTimeEl = document.getElementById("currentTime");
-        const durationEl = document.getElementById("duration");
+        function paintProgress(percent = 0) {
+            progress.value = percent;
+            progress.style.background = `linear-gradient(to right, #1db954 ${percent}%, #444 ${percent}%)`;
+        }
 
-        // 🎯 ICON PATHS (MATCH YOUR ASSETS FOLDER)
-        const playIcon = "assets/play_musicbar.png";
-        const pauseIcon = "assets/pause_musicbar.png";
-
-        // ▶️ LOAD SONG
         function loadSong(index) {
-        const song = songs[index];
-        audio.src = song.src;
-
-        if (title) title.textContent = song.title;
-        if (artist) artist.textContent = song.artist;
-
-        // 🎨 CHANGE COVER
-        if (cover) cover.src = song.cover;
+            currentSong = (index + currentPlaylist.length) % currentPlaylist.length;
+            const song = currentPlaylist[currentSong];
+            audio.src = song.src;
+            title.textContent = song.title;
+            artist.textContent = song.artist;
+            cover.src = song.cover || "assets/EX.jpg";
+            cover.onerror = () => { cover.src = "assets/EX.jpg"; };
+            currentTime.textContent = "0:00";
+            duration.textContent = "0:00";
+            paintProgress();
+            updateLikeState();
         }
 
-        // ▶️ PLAY
         function playSong() {
-        audio.play();
-
-        if (playBtn.tagName === "IMG") playBtn.src = pauseIcon;
-
-        // ✅ CHANGE COVER ONLY WHEN PLAYING
-        if (cover) cover.src = songs[currentSong].cover;
+            audio.play().catch(() => {});
+            playBtn.src = "assets/pause_musicbar.png";
         }
 
-        // ⏸ PAUSE
         function pauseSong() {
-        audio.pause();
-        if (playBtn.tagName === "IMG") playBtn.src = playIcon;
+            audio.pause();
+            playBtn.src = "assets/play_musicbar.png";
         }
 
-        // 🔘 PLAY CLICK
-        if (playBtn) {
-        playBtn.addEventListener("click", () => {
-            if (audio.paused) {
-            playSong();
+        function nextSong() {
+            if (queue.length) {
+                const next = queue.shift();
+                currentPlaylist = [next];
+                loadSong(0);
+            } else if (shuffle && currentPlaylist.length > 1) {
+                loadSong(Math.floor(Math.random() * currentPlaylist.length));
             } else {
-            pauseSong();
+                loadSong(currentSong + 1);
+            }
+            renderQueue();
+            playSong();
+        }
+
+        function previousSong() {
+            if (audio.currentTime > 3) audio.currentTime = 0;
+            else loadSong(currentSong - 1);
+            playSong();
+        }
+
+        function updateLikeState() {
+            const isSaved = saved.some((song) => song.src === currentPlaylist[currentSong]?.src);
+            $("likeBtn").classList.toggle("liked", isSaved);
+            $("likeBtn").classList.toggle("fa-regular", !isSaved);
+            $("likeBtn").classList.toggle("fa-solid", isSaved);
+        }
+
+        function playTrack(song, trackList) {
+            currentPlaylist = trackList;
+            currentSong = trackList.findIndex((item) => item.src === song.src);
+            loadSong(currentSong < 0 ? 0 : currentSong);
+            playSong();
+        }
+
+        function renderPlaylistPage(name, songs, coverImage) {
+              $("homeContent").style.display = "none";
+              $("homeView").style.display = "none";
+            $("searchPage").classList.remove("visible");
+            const page = $("playlistPage");
+            page.classList.add("visible");
+            page.innerHTML = `<div class="playlist-hero"><img src="${coverImage || "assets/EX.jpg"}" alt=""><div><button class="back-button" id="backHome"><i class="fa-solid fa-arrow-left"></i> Home</button><span class="eyebrow">Playlist</span><h1>${name}</h1><p>${songs.length} songs in this collection</p></div></div><div class="playlist-track-list">${songs.map((song, index) => `<button class="playlist-song" data-track-index="${index}"><span class="track-number">${index + 1}</span><span class="track-copy"><strong>${song.title}</strong><small>${song.artist}</small></span><i class="fa-solid fa-play"></i></button>`).join("")}</div>`;
+            $("backHome").addEventListener("click", showHome);
+            page.querySelectorAll("[data-track-index]").forEach((button) => button.addEventListener("click", () => playTrack(songs[Number(button.dataset.trackIndex)], songs)));
+        }
+
+        function showHome() {
+                $("homeContent").style.display = "block";
+            $("homeView").style.display = "block";
+            $("searchPage").classList.remove("visible");
+            $("playlistPage").classList.remove("visible");
+        }
+
+        function renderLibrary() {
+            const savedMarkup = saved.length ? saved.map((song, index) => `<button class="library-track" data-saved="${index}"><i class="fa-solid fa-music"></i>${song.title}</button>`).join("") : "";
+            const playlistMarkup = userPlaylists.map((playlist, index) => `<button class="library-track" data-playlist="${index}" style="--playlist-color:${playlist.color || "#1db954"}"><i class="fa-solid fa-list"></i><span>${playlist.name}<small>${playlist.songs.length} songs</small></span></button>`).join("");
+            $("libraryList").innerHTML = savedMarkup + playlistMarkup;
+            document.querySelectorAll("[data-saved]").forEach((button) => button.addEventListener("click", () => {
+                currentPlaylist = saved;
+                loadSong(Number(button.dataset.saved));
+                playSong();
+            }));
+            document.querySelectorAll("[data-playlist]").forEach((button) => button.addEventListener("click", () => {
+                const playlist = userPlaylists[Number(button.dataset.playlist)];
+                if (!playlist.songs.length) return;
+                renderPlaylistPage(playlist.name, playlist.songs, playlist.songs[0].cover);
+            }));
+        }
+
+        function renderQueue() {
+            localStorage.setItem("snoopys-queue", JSON.stringify(queue));
+            $("queueList").innerHTML = queue.length ? queue.map((song, index) => `<button class="queue-track" data-queue="${index}"><strong>${song.title}</strong><span>${song.artist}</span></button>`).join("") : "<p class='empty-state'>Your queue is empty.</p>";
+            document.querySelectorAll("[data-queue]").forEach((button) => button.addEventListener("click", () => {
+                currentPlaylist = [queue.splice(Number(button.dataset.queue), 1)[0]];
+                loadSong(0);
+                renderQueue();
+                playSong();
+            }));
+        }
+
+        function showSearchResults(query) {
+            const results = allSongs.filter((song) => `${song.title} ${song.artist}`.toLowerCase().includes(query.toLowerCase()));
+            const markup = query ? results.map((song) => `<button class="result" data-src="${song.src}"><img src="${song.cover || "assets/EX.jpg"}" alt=""><span><strong>${song.title}</strong><small>${song.artist}</small></span></button>`).join("") : "<p class='empty-state'>Type a song or artist to start searching.</p>";
+            $("searchPageResults").innerHTML = markup;
+            document.querySelectorAll("[data-src]").forEach((button) => button.addEventListener("click", () => {
+                playTrack(allSongs.find((song) => song.src === button.dataset.src), allSongs);
+                $("searchInput").value = "";
+                showSearchResults("");
+            }));
+        }
+
+        function openSearchPage() {
+                $("homeContent").style.display = "none";
+            $("homeView").style.display = "none";
+            $("playlistPage").classList.remove("visible");
+            $("searchPage").classList.add("visible");
+            $("searchInput").focus();
+            showSearchResults($("searchInput").value);
+        }
+
+        function openSaveDialog() {
+            if (!userPlaylists.length) { openPlaylistDialog(); return; }
+            $("savePlaylist").innerHTML = userPlaylists.map((playlist, index) => `<option value="${index}">${playlist.name}</option>`).join("");
+            $("saveDialog").hidden = false;
+        }
+
+        function closeSaveDialog() { $("saveDialog").hidden = true; }
+
+        function saveToPlaylist(event) {
+            event.preventDefault();
+            const playlist = userPlaylists[Number($("savePlaylist").value)];
+            const song = currentPlaylist[currentSong];
+            if (playlist && !playlist.songs.some((item) => item.src === song.src)) {
+                playlist.songs.push(song);
+                localStorage.setItem("snoopys-playlists", JSON.stringify(userPlaylists));
+            }
+            saved = saved.some((item) => item.src === song.src) ? saved : [...saved, song];
+            localStorage.setItem("snoopys-saved", JSON.stringify(saved));
+            updateLikeState();
+            renderLibrary();
+            closeSaveDialog();
+        }
+
+        playBtn.addEventListener("click", () => audio.paused ? playSong() : pauseSong());
+        $("next").addEventListener("click", nextSong);
+        $("prev").addEventListener("click", previousSong);
+        $("shuffle").addEventListener("click", () => { shuffle = !shuffle; $("shuffle").classList.toggle("active-control", shuffle); });
+        $("repeat").addEventListener("click", () => { repeat = !repeat; $("repeat").classList.toggle("active-control", repeat); });
+        $("likeBtn").addEventListener("click", openSaveDialog);
+        $("queueBtn").addEventListener("click", () => { queue.push(currentPlaylist[currentSong]); renderQueue(); $("queuePanel").classList.add("visible"); });
+        $("openQueue").addEventListener("click", () => { renderQueue(); $("queuePanel").classList.add("visible"); });
+        $("closeQueue").addEventListener("click", () => $("queuePanel").classList.remove("visible"));
+        $("searchInput").addEventListener("focus", openSearchPage);
+        $("searchInput").addEventListener("input", (event) => showSearchResults(event.target.value));
+        $("searchInput").addEventListener("keydown", (event) => { if (event.key === "Escape") { event.target.value = ""; showSearchResults(""); } });
+        document.querySelector(".search").addEventListener("click", (event) => { event.preventDefault(); openSearchPage(); });
+        $("closeSearch").addEventListener("click", showHome);
+        document.querySelector(".home").addEventListener("click", (event) => { event.preventDefault(); showHome(); });
+        $("volume").addEventListener("input", (event) => { audio.volume = event.target.value / 100; localStorage.setItem("snoopys-volume", event.target.value); paintVolume(event.target.value); $("muteBtn").className = audio.volume ? "fa-solid fa-volume-low controls-icon" : "fa-solid fa-volume-xmark controls-icon"; });
+        $("muteBtn").addEventListener("click", () => { audio.muted = !audio.muted; $("muteBtn").className = audio.muted ? "fa-solid fa-volume-xmark controls-icon" : "fa-solid fa-volume-low controls-icon"; });
+        $("progress").addEventListener("input", () => { if (audio.duration) audio.currentTime = progress.value / 100 * audio.duration; paintProgress(progress.value); });
+        audio.addEventListener("loadedmetadata", () => duration.textContent = formatTime(audio.duration));
+        audio.addEventListener("timeupdate", () => { const percent = audio.duration ? audio.currentTime / audio.duration * 100 : 0; paintProgress(percent); currentTime.textContent = formatTime(audio.currentTime); duration.textContent = formatTime(audio.duration); });
+        audio.addEventListener("play", () => playBtn.src = "assets/pause_musicbar.png");
+        audio.addEventListener("pause", () => playBtn.src = "assets/play_musicbar.png");
+        audio.addEventListener("ended", () => repeat ? (audio.currentTime = 0, playSong()) : nextSong());
+        document.addEventListener("keydown", (event) => { if (event.target.matches("input")) return; if (event.code === "Space") { event.preventDefault(); audio.paused ? playSong() : pauseSong(); } if (event.code === "ArrowRight") audio.currentTime = Math.min(audio.duration || 0, audio.currentTime + 5); if (event.code === "ArrowLeft") audio.currentTime = Math.max(0, audio.currentTime - 5); if (event.key.toLowerCase() === "m") $("muteBtn").click(); });
+        $("global").addEventListener("click", () => renderPlaylistPage("Top 50 - Global", playlists.global, "assets/card1img.jpeg"));
+        $("tupac").addEventListener("click", () => renderPlaylistPage("2Pac", playlists.tupac, "assets/2pac.jpg"));
+        function openPlaylistDialog() { $("playlistDialog").hidden = false; $("playlistName").focus(); }
+        function closePlaylistDialog() { $("playlistDialog").hidden = true; $("playlistForm").reset(); }
+        function createPlaylist(event) {
+            event.preventDefault();
+            const name = $("playlistName").value.trim();
+            if (!name) return;
+            userPlaylists.push({ name, color: $("playlistColor").value, songs: [currentPlaylist[currentSong]] });
+            localStorage.setItem("snoopys-playlists", JSON.stringify(userPlaylists));
+            renderLibrary();
+            closePlaylistDialog();
+        }
+        $("createPlaylist").addEventListener("click", openPlaylistDialog);
+        $("createPlaylistButton").addEventListener("click", openPlaylistDialog);
+        $("playlistForm").addEventListener("submit", createPlaylist);
+        $("cancelPlaylist").addEventListener("click", closePlaylistDialog);
+        $("playlistDialog").addEventListener("click", (event) => { if (event.target === $("playlistDialog")) closePlaylistDialog(); });
+        $("saveForm").addEventListener("submit", saveToPlaylist);
+        $("cancelSave").addEventListener("click", closeSaveDialog);
+        $("saveDialog").addEventListener("click", (event) => { if (event.target === $("saveDialog")) closeSaveDialog(); });
+        $("fullscreenBtn").addEventListener("click", async () => {
+            try {
+                if (!document.fullscreenElement) await document.documentElement.requestFullscreen();
+                else await document.exitFullscreen();
+            } catch (error) {
+                document.body.classList.toggle("player-fullscreen");
             }
         });
-        }
-
-        // ⏭ NEXT
-        if (nextBtn) {
-        nextBtn.addEventListener("click", () => {
-            currentSong = (currentSong + 1) % currentPlaylist.length;
-            loadSong(currentSong);
-            playSong();
+        document.addEventListener("fullscreenchange", () => {
+            const active = Boolean(document.fullscreenElement);
+            $("fullscreenBtn").className = active ? "fa-solid fa-compress controls-icon" : "fa-solid fa-expand controls-icon";
+            $("fullscreenBtn").title = active ? "Exit fullscreen" : "Fullscreen";
         });
-        }
-
-        // ⏮ PREV
-        if (prevBtn) {
-        prevBtn.addEventListener("click", () => {
-           currentSong = (currentSong - 1) % currentPlaylist.length;
-            loadSong(currentSong);
-            playSong();
-        });
-        }
-
-        audio.addEventListener("loadedmetadata", () => {
-        // reset progress
-        progress.value = 0;
-
-        // reset bar color
-        progress.style.background = "#444";
-
-        // set correct duration text
-        durationEl.textContent = formatTime(audio.duration);
-        });
-
-        audio.addEventListener("timeupdate", () => {
-        if (!audio.duration) return;
-
-        const percent = (audio.currentTime / audio.duration) * 100;
-
-        progress.value = percent;
-
-        // 🔥 THIS CONTROLS THE GREEN BAR
-        progress.style.background = `linear-gradient(to right, #1db954 ${percent}%, #444 ${percent}%)`;
-
-        currentTimeEl.textContent = formatTime(audio.currentTime);
-        durationEl.textContent = formatTime(audio.duration);
-        });
-
-        // seek
-        progress.addEventListener("input", () => {
-        const percent = progress.value;
-
-        progress.style.background = `linear-gradient(to right, #1db954 ${percent}%, #444 ${percent}%)`;
-
-        if (audio.duration) {
-            audio.currentTime = (percent / 100) * audio.duration;
-        }
-        });
-
-        // 🔁 AUTO NEXT
-        audio.addEventListener("ended", () => {
-        if (nextBtn) nextBtn.click();
-        });
-
-        // 🕒 FORMAT TIME
-        function formatTime(time) {
-        if (isNaN(time)) return "0:00";
-
-        const minutes = Math.floor(time / 60);
-        const seconds = Math.floor(time % 60);
-        return minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
-        }
-
-        function loadSong(index) {
-        const song = currentPlaylist[index];
-        audio.src = song.src;
-
-        if (title) title.textContent = song.title;
-        if (artist) artist.textContent = song.artist;
-        if (cover) cover.src = song.cover;
-
-        progress.value = 0;
-        progress.style.background = "#444";
-        }
-
-        // 🚀 INIT
-        loadSong(currentSong);
-        // 🎶 CARD CLICK HANDLERS
-
-        const globalCard = document.getElementById("global");
-        const tupacCard = document.getElementById("tupac");
-
-        if (globalCard) {
-        globalCard.addEventListener("click", () => {
-            currentPlaylist = playlists.global;
-            currentSong = 0;
-            loadSong(currentSong);
-            playSong();
-        });
-        }
-
-        if (tupacCard) {
-        tupacCard.addEventListener("click", () => {
-            currentPlaylist = playlists.tupac;
-            currentSong = 0;
-            loadSong(currentSong);
-            playSong();
-        });
-        }
+        function paintVolume(value) { $("volume").style.background = `linear-gradient(to right, #1bd760 ${value}%, #444 ${value}%)`; }
+        audio.volume = Number.isFinite(savedVolume) && savedVolume >= 0 ? savedVolume / 100 : 0.8;
+        $("volume").value = Number.isFinite(savedVolume) && savedVolume >= 0 ? savedVolume : 80;
+        paintVolume($("volume").value);
+        loadSong(0);
+        renderLibrary();
+        renderQueue();
     </script>
 
 </body>
