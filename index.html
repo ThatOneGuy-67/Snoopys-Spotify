@@ -121,24 +121,30 @@
     </script>
 
     <script>
+        // Coder note: add new local songs in the playlist below.
+        // Format: song("Title", "Artist", "music/file-name.mp3", "assets/cover.jpg")
+        // The cover argument is optional and defaults to the fallback cover.
+        const song = (title, artist, src, cover = "assets/EX.jpg") => ({ title, artist, src, cover });
+
+        // MUSIC LIBRARY: add a song to global or tupac, or create another playlist here.
         const playlists = {
             global: [
-                { title: "California Girls", artist: "Snoop Dogg/Katy Perry", src: "music/California Gurls.mp3", cover: "assets/Cal.jpg" },
-                { title: "Never Gonna Give U Up", artist: "Rick Astley", src: "music/Never Gonna Give You Up.mp3", cover: "assets/rick.jpg" },
-                { title: "Crank That", artist: "Soulja Boy", src: "music/Crank That.mp3", cover: "assets/SB.jpg" },
-                { title: "Stand by me", artist: "Ben King", src: "music/Stand by me.mp3", cover: "assets/Stan.jpg" },
-                { title: "Steve's Lava", artist: "Mojang", src: "music/Steve's Lava Chicken.mp3", cover: "assets/MM.jpg" },
-                { title: "Murder business", artist: "Young Boy", src: "music/Murder business -YoungBoy.mp3", cover: "assets/YB.jpg" },
-                { title: "Hot Now", artist: "Young Boy", src: "music/Hot Now -YoungBoy.mp3", cover: "assets/YB2.jpg" }
+                song("California Girls", "Snoop Dogg/Katy Perry", "music/California Gurls.mp3", "assets/Cal.jpg"),
+                song("Never Gonna Give U Up", "Rick Astley", "music/Never Gonna Give You Up.mp3", "assets/rick.jpg"),
+                song("Crank That", "Soulja Boy", "music/Crank That.mp3", "assets/SB.jpg"),
+                song("Stand by me", "Ben King", "music/Stand by me.mp3", "assets/Stan.jpg"),
+                song("Steve's Lava", "Mojang", "music/Steve's Lava Chicken.mp3", "assets/MM.jpg"),
+                song("Murder business", "Young Boy", "music/Murder business -YoungBoy.mp3", "assets/YB.jpg"),
+                song("Hot Now", "Young Boy", "music/Hot Now -YoungBoy.mp3", "assets/YB2.jpg")
             ],
             tupac: [
-                { title: "California Love (remix)", artist: "2Pac", src: "music/California Love (remix) (ft. Dr. Dre, Roger Troutman) - Remix.mp3", cover: "assets/2pac.jpg" },
-                { title: "Bomb First", artist: "2Pac", src: "music/Bomb First (My Second Reply).mp3", cover: "assets/2pac.jpg" },
-                { title: "Can_t C Me", artist: "2Pac", src: "music/Can_t C Me.mp3", cover: "assets/2pac.jpg" },
-                { title: "Definition Of A Thug Nigga", artist: "2Pac", src: "music/Definition Of A Thug Nigga.mp3", cover: "assets/2pac.jpg" },
-                { title: "Ambitionz Az A Ridah", artist: "2Pac", src: "music/Ambitionz Az A Ridah.mp3", cover: "assets/2pac.jpg" },
-                { title: "Dear Mama", artist: "2Pac", src: "music/Dear Mama.mp3", cover: "assets/2pac.jpg" },
-                { title: "All Eyez On Me", artist: "2Pac", src: "music/All Eyez On Me (ft. Big Syke).mp3", cover: "assets/2pac.jpg" }
+                song("California Love (remix)", "2Pac", "music/California Love (remix) (ft. Dr. Dre, Roger Troutman) - Remix.mp3", "assets/2pac.jpg"),
+                song("Bomb First", "2Pac", "music/Bomb First (My Second Reply).mp3", "assets/2pac.jpg"),
+                song("Can_t C Me", "2Pac", "music/Can_t C Me.mp3", "assets/2pac.jpg"),
+                song("Definition Of A Thug Nigga", "2Pac", "music/Definition Of A Thug Nigga.mp3", "assets/2pac.jpg"),
+                song("Ambitionz Az A Ridah", "2Pac", "music/Ambitionz Az A Ridah.mp3", "assets/2pac.jpg"),
+                song("Dear Mama", "2Pac", "music/Dear Mama.mp3", "assets/2pac.jpg"),
+                song("All Eyez On Me", "2Pac", "music/All Eyez On Me (ft. Big Syke).mp3", "assets/2pac.jpg")
             ]
         };
         const allSongs = [...playlists.global, ...playlists.tupac];
