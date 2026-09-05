@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
+    <base href="https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Snoopys-Spotify@main/">
     <link rel="icon" href="assets\logo.png">
     <title>Spotify - Web Player: Music for everyone</title>
     <link rel="stylesheet" href="style.css">
@@ -62,7 +63,7 @@
                 <div id="homeContent">
                     <h2>Recently Played</h2>
                     <div class="card-container">
-                        
+
                         <!---<div class="card" id="PLAYLIST"><img src="assets/IMAGE.jpeg" class="card-img" alt="BLANK"><p class="card-title">Name</p><p class="card-info">Description</p></div>--->
 
                         <div class="card" id="global"><img src="assets/card1img.jpeg" class="card-img" alt="Global playlist"><p class="card-title">Top 50 - Global</p><p class="card-info">Your daily update of the most played tracks ...</p></div>
@@ -86,7 +87,7 @@
         <div class="music-player">
             <div class="album"><div class="album-cover"><img src="assets/EX.jpg" class="track-cover" id="cover" alt="Current track"></div><div class="album-info"><p class="track-title" id="title">Blank</p><p class="track-dis" id="artist">Blank</p></div><div class="album-options hide2"><i class="fa-regular fa-heart album-options-icon" id="likeBtn" title="Save to library" role="button" tabindex="0"></i><i class="fa-regular fa-bookmark album-options-icon" id="queueBtn" title="Add to queue" role="button" tabindex="0"></i></div></div>
             <div class="player"><div class="player-controls"><img src="assets/player_icon1.png" class="player-control-icon" id="shuffle" title="Shuffle"><img src="assets/player_icon2.png" class="player-control-icon" id="prev" title="Previous"><img src="assets/play_musicbar.png" class="player-control-icon" id="play" style="opacity: 1; height:2rem;" title="Play"><img src="assets/player_icon4.png" class="player-control-icon" id="next" title="Next"><img src="assets/player_icon5.png" class="player-control-icon" id="repeat" title="Repeat"></div><div class="progress"><span class="curr-time" id="currentTime">0:00</span><input type="range" min="0" max="100" value="0" class="progress-bar" id="progress" aria-label="Seek"><span class="tot-time" id="duration">0:00</span></div></div>
-            <div class="controls"><i class="fa-solid fa-volume-low controls-icon" id="muteBtn" title="Mute"></i><input type="range" min="0" max="100" value="80" class="volume" id="volume" step="1" aria-label="Volume"><i class="fa-solid fa-expand controls-icon" id="fullscreenBtn" title="Fullscreen" role="button" tabindex="0"></i></div>
+            <div class="controls"><i class="fa-solid fa-volume-low controls-icon" id="muteBtn" title="Mute"></i><input type="range" min="0" max="100" value="50" class="volume" id="volume" step="1" aria-label="Volume"><i class="fa-solid fa-expand controls-icon" id="fullscreenBtn" title="Fullscreen" role="button" tabindex="0"></i></div>
         </div>
     </div>
 
@@ -436,8 +437,8 @@
             $("fullscreenBtn").title = active ? "Exit fullscreen" : "Fullscreen";
         });
         function paintVolume(value) { $("volume").style.background = `linear-gradient(to right, #1bd760 ${value}%, #444 ${value}%)`; }
-        audio.volume = Number.isFinite(savedVolume) && savedVolume >= 0 ? savedVolume / 100 : 0.8;
-        $("volume").value = Number.isFinite(savedVolume) && savedVolume >= 0 ? savedVolume : 80;
+        audio.volume = Number.isFinite(savedVolume) && savedVolume >= 0 ? savedVolume / 100 : 0.5;
+        $("volume").value = Number.isFinite(savedVolume) && savedVolume >= 0 ? savedVolume : 50;
         paintVolume($("volume").value);
         loadSong(0);
         renderLibrary();
