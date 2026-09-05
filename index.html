@@ -187,11 +187,20 @@
         function playSong() {
             audio.play().catch(() => {});
             playBtn.src = "assets/pause_musicbar.png";
+            updatePlayingRows();
         }
 
         function pauseSong() {
             audio.pause();
             playBtn.src = "assets/play_musicbar.png";
+            updatePlayingRows();
+        }
+
+        function updatePlayingRows() {
+            document.querySelectorAll(".playlist-song").forEach((row) => {
+                const song = currentPlaylist[Number(row.dataset.trackIndex)];
+                row.classList.toggle("is-playing", Boolean(song && song.src === currentPlaylist[currentSong]?.src && !audio.paused));
+            });
         }
 
         function nextSong() {
@@ -228,15 +237,29 @@
             playSong();
         }
 
+        function toggleRowMenu(button) {
+            document.querySelectorAll(".row-menu.open").forEach((menu) => menu.classList.remove("open"));
+            const menu = button.nextElementSibling;
+            menu.classList.add("open");
+            const buttonRect = button.getBoundingClientRect();
+            const menuRect = menu.getBoundingClientRect();
+            const left = Math.max(8, Math.min(buttonRect.right - menuRect.width, window.innerWidth - menuRect.width - 8));
+            const top = buttonRect.bottom + menuRect.height <= window.innerHeight - 8 ? buttonRect.bottom + 4 : buttonRect.top - menuRect.height - 4;
+            menu.style.left = `${left}px`;
+            menu.style.top = `${Math.max(8, top)}px`;
+        }
+
         function renderPlaylistPage(name, songs, coverImage) {
               $("homeContent").style.display = "none";
               $("homeView").style.display = "none";
             $("searchPage").classList.remove("visible");
             const page = $("playlistPage");
             page.classList.add("visible");
-            page.innerHTML = `<div class="playlist-hero"><img src="${coverImage || "assets/EX.jpg"}" alt=""><div><button class="back-button" id="backHome"><i class="fa-solid fa-arrow-left"></i> Home</button><span class="eyebrow">Playlist</span><h1>${name}</h1><p>${songs.length} songs in this collection</p></div></div><div class="playlist-track-list">${songs.map((song, index) => `<button class="playlist-song" data-track-index="${index}"><span class="track-number">${index + 1}</span><span class="track-copy"><strong>${song.title}</strong><small>${song.artist}</small></span><i class="fa-solid fa-play"></i></button>`).join("")}</div>`;
+            page.innerHTML = `<div class="playlist-hero"><img src="${coverImage || "assets/EX.jpg"}" alt=""><div><button class="back-button" id="backHome"><i class="fa-solid fa-arrow-left"></i> Home</button><span class="eyebrow">Playlist</span><h1>${name}</h1><p>${songs.length} songs in this collection</p></div></div><div class="playlist-track-list">${songs.map((song, index) => `<div class="playlist-song ${song.src === currentPlaylist[currentSong]?.src && !audio.paused ? "is-playing" : ""}" data-track-index="${index}"><button class="song-main"><span class="track-number">${index + 1}</span><span class="track-copy"><strong>${song.title}</strong><small>${song.artist}</small></span><span class="equalizer" aria-hidden="true"><i></i><i></i><i></i></span><i class="fa-solid fa-play"></i></button><button class="more-button" data-menu="${index}" aria-label="More options"><i class="fa-solid fa-ellipsis"></i></button><div class="row-menu"><button data-action="remove-song" data-index="${index}">Remove from playlist</button><button data-action="queue-song" data-index="${index}">Add to queue</button></div></div>`).join("")}</div>`;
             $("backHome").addEventListener("click", showHome);
-            page.querySelectorAll("[data-track-index]").forEach((button) => button.addEventListener("click", () => playTrack(songs[Number(button.dataset.trackIndex)], songs)));
+            page.querySelectorAll(".song-main").forEach((button, index) => button.addEventListener("click", () => playTrack(songs[index], songs)));
+            page.querySelectorAll("[data-menu]").forEach((button) => button.addEventListener("click", (event) => { event.stopPropagation(); toggleRowMenu(button); }));
+            page.querySelectorAll("[data-action]").forEach((button) => button.addEventListener("click", () => handleRowAction(button.dataset.action, Number(button.dataset.index), songs, name)));
         }
 
         function showHome() {
@@ -247,9 +270,10 @@
         }
 
         function renderLibrary() {
-            const savedMarkup = saved.length ? saved.map((song, index) => `<button class="library-track" data-saved="${index}"><i class="fa-solid fa-music"></i>${song.title}</button>`).join("") : "";
-            const playlistMarkup = userPlaylists.map((playlist, index) => `<button class="library-track" data-playlist="${index}" style="--playlist-color:${playlist.color || "#1db954"}"><i class="fa-solid fa-list"></i><span>${playlist.name}<small>${playlist.songs.length} songs</small></span></button>`).join("");
+            const savedMarkup = saved.length ? saved.map((song, index) => `<div class="library-track"><button class="library-track-main" data-saved="${index}"><i class="fa-solid fa-music"></i><span>${song.title}<small>${song.artist}</small></span></button><button class="more-button" data-library-menu="${index}" aria-label="More options"><i class="fa-solid fa-ellipsis"></i></button><div class="row-menu"><button data-action="remove-saved" data-index="${index}">Remove from saved</button><button data-action="queue-saved" data-index="${index}">Add to queue</button></div></div>`).join("") : "";
+            const playlistMarkup = userPlaylists.map((playlist, index) => `<div class="library-track" style="--playlist-color:${playlist.color || "#1db954"}"><button class="library-track-main" data-playlist="${index}"><i class="fa-solid fa-list"></i><span>${playlist.name}<small>${playlist.songs.length} songs</small></span></button><button class="more-button" data-library-menu="${index}" aria-label="More options"><i class="fa-solid fa-ellipsis"></i></button><div class="row-menu"><button data-action="delete-playlist" data-index="${index}">Delete playlist</button><button data-action="queue-playlist" data-index="${index}">Add playlist to queue</button></div></div>`).join("");
             $("libraryList").innerHTML = savedMarkup + playlistMarkup;
+            $("createPlaylistButton").closest(".box").hidden = userPlaylists.length > 0;
             document.querySelectorAll("[data-saved]").forEach((button) => button.addEventListener("click", () => {
                 currentPlaylist = saved;
                 loadSong(Number(button.dataset.saved));
@@ -260,6 +284,30 @@
                 if (!playlist.songs.length) return;
                 renderPlaylistPage(playlist.name, playlist.songs, playlist.songs[0].cover);
             }));
+            document.querySelectorAll("[data-library-menu]").forEach((button) => button.addEventListener("click", (event) => { event.stopPropagation(); toggleRowMenu(button); }));
+            document.querySelectorAll("#libraryList [data-action]").forEach((button) => button.addEventListener("click", () => handleLibraryAction(button.dataset.action, Number(button.dataset.index))));
+        }
+
+        function handleLibraryAction(action, index) {
+            if (action === "remove-saved") { saved.splice(index, 1); localStorage.setItem("snoopys-saved", JSON.stringify(saved)); }
+            if (action === "queue-saved") queue.push(saved[index]);
+            if (action === "delete-playlist") userPlaylists.splice(index, 1);
+            if (action === "queue-playlist") queue.push(...userPlaylists[index].songs);
+            localStorage.setItem("snoopys-playlists", JSON.stringify(userPlaylists));
+            renderLibrary();
+            renderQueue();
+        }
+
+        function handleRowAction(action, index, songs, name) {
+            if (action === "queue-song") { queue.push(songs[index]); renderQueue(); return; }
+            if (action !== "remove-song") return;
+            const playlist = userPlaylists.find((item) => item.name === name);
+            if (!playlist) return;
+            playlist.songs = playlist.songs.filter((song) => song.src !== songs[index].src);
+            localStorage.setItem("snoopys-playlists", JSON.stringify(userPlaylists));
+            renderLibrary();
+            if (playlist.songs.length) renderPlaylistPage(playlist.name, playlist.songs, playlist.songs[0].cover);
+            else showHome();
         }
 
         function renderQueue() {
@@ -337,7 +385,9 @@
         audio.addEventListener("loadedmetadata", () => duration.textContent = formatTime(audio.duration));
         audio.addEventListener("timeupdate", () => { const percent = audio.duration ? audio.currentTime / audio.duration * 100 : 0; paintProgress(percent); currentTime.textContent = formatTime(audio.currentTime); duration.textContent = formatTime(audio.duration); });
         audio.addEventListener("play", () => playBtn.src = "assets/pause_musicbar.png");
-        audio.addEventListener("pause", () => playBtn.src = "assets/play_musicbar.png");
+        audio.addEventListener("play", updatePlayingRows);
+        audio.addEventListener("pause", () => { playBtn.src = "assets/play_musicbar.png"; updatePlayingRows(); });
+        audio.addEventListener("ended", updatePlayingRows);
         audio.addEventListener("ended", () => repeat ? (audio.currentTime = 0, playSong()) : nextSong());
         document.addEventListener("keydown", (event) => { if (event.target.matches("input")) return; if (event.code === "Space") { event.preventDefault(); audio.paused ? playSong() : pauseSong(); } if (event.code === "ArrowRight") audio.currentTime = Math.min(audio.duration || 0, audio.currentTime + 5); if (event.code === "ArrowLeft") audio.currentTime = Math.max(0, audio.currentTime - 5); if (event.key.toLowerCase() === "m") $("muteBtn").click(); });
         $("global").addEventListener("click", () => renderPlaylistPage("Top 50 - Global", playlists.global, "assets/card1img.jpeg"));
@@ -361,6 +411,7 @@
         $("saveForm").addEventListener("submit", saveToPlaylist);
         $("cancelSave").addEventListener("click", closeSaveDialog);
         $("saveDialog").addEventListener("click", (event) => { if (event.target === $("saveDialog")) closeSaveDialog(); });
+        document.addEventListener("click", (event) => { if (!event.target.closest(".more-button") && !event.target.closest(".row-menu")) document.querySelectorAll(".row-menu.open").forEach((menu) => menu.classList.remove("open")); });
         $("fullscreenBtn").addEventListener("click", async () => {
             try {
                 if (!document.fullscreenElement) await document.documentElement.requestFullscreen();
