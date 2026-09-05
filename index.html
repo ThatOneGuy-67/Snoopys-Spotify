@@ -62,6 +62,9 @@
                 <div id="homeContent">
                     <h2>Recently Played</h2>
                     <div class="card-container">
+                        
+                        <!---<div class="card" id="PLAYLIST"><img src="assets/IMAGE.jpeg" class="card-img" alt="BLANK"><p class="card-title">Name</p><p class="card-info">Description</p></div>--->
+
                         <div class="card" id="global"><img src="assets/card1img.jpeg" class="card-img" alt="Global playlist"><p class="card-title">Top 50 - Global</p><p class="card-info">Your daily update of the most played tracks ...</p></div>
                         <div class="card" id="tupac"><img src="assets/2pac.jpg" class="card-img" alt="2Pac playlist"><p class="card-title">2Pac</p><p class="card-info">2Pac songs, I think all songs...</p></div>
                     </div>
@@ -127,6 +130,8 @@
         const song = (title, artist, src, cover = "assets/EX.jpg") => ({ title, artist, src, cover });
 
         // MUSIC LIBRARY: add a song to global or tupac, or create another playlist here.
+
+        // Ex: song("Display Name", "Artist", "music/blank.mp3", "assets/blank.jpg"),
         const playlists = {
             global: [
                 song("California Girls", "Snoop Dogg/Katy Perry", "music/California Gurls.mp3", "assets/Cal.jpg"),
@@ -138,7 +143,6 @@
                 song("Hot Now", "Young Boy", "music/Hot Now -YoungBoy.mp3", "assets/YB2.jpg")
             ],
             tupac: [
-                song("California Love (remix)", "2Pac", "music/California Love (remix) (ft. Dr. Dre, Roger Troutman) - Remix.mp3", "assets/2pac.jpg"),
                 song("Bomb First", "2Pac", "music/Bomb First (My Second Reply).mp3", "assets/2pac.jpg"),
                 song("Can_t C Me", "2Pac", "music/Can_t C Me.mp3", "assets/2pac.jpg"),
                 song("Definition Of A Thug Nigga", "2Pac", "music/Definition Of A Thug Nigga.mp3", "assets/2pac.jpg"),
