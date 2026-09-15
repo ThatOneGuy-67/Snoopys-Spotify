@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-    <base href="https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Snoopys-Spotify@main/">
-    <link rel="icon" href="assets\logo.png">
+    <link rel="icon" href="assets/logo.png">
     <title>Spotify - Web Player: Music for everyone</title>
     <link rel="stylesheet" href="style.css">
 
@@ -14,6 +13,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=speaker" />
+    <script src="playlist-data.js"></script>
 </head>
 <body>
     <!-- Loader Code -->
@@ -62,13 +62,7 @@
             <div class="cards">
                 <div id="homeContent">
                     <h2>Recently Played</h2>
-                    <div class="card-container">
-
-                        <!---<div class="card" id="PLAYLIST"><img src="assets/IMAGE.jpeg" class="card-img" alt="BLANK"><p class="card-title">Name</p><p class="card-info">Description</p></div>--->
-
-                        <div class="card" id="global"><img src="assets/card1img.jpeg" class="card-img" alt="Global playlist"><p class="card-title">Top 50 - Global</p><p class="card-info">Your daily update of the most played tracks ...</p></div>
-                        <div class="card" id="tupac"><img src="assets/2pac.jpg" class="card-img" alt="2Pac playlist"><p class="card-title">2Pac</p><p class="card-info">2Pac songs, I think all songs...</p></div>
-                    </div>
+                    <div class="card-container" id="playlistCards"></div>
                 </div>
                 <div id="homeView">
                     <div id="searchResults" class="search-results" aria-live="polite"></div>
@@ -125,34 +119,8 @@
     </script>
 
     <script>
-        // Coder note: add new local songs in the playlist below.
-        // Format: song("Title", "Artist", "music/file-name.mp3", "assets/cover.jpg")
-        // The cover argument is optional and defaults to the fallback cover.
-        const song = (title, artist, src, cover = "assets/EX.jpg") => ({ title, artist, src, cover });
-
-        // MUSIC LIBRARY: add a song to global or tupac, or create another playlist here.
-
-        // Ex: song("Display Name", "Artist", "music/blank.mp3", "assets/blank.jpg"),
-        const playlists = {
-            global: [
-                song("California Girls", "Snoop Dogg/Katy Perry", "music/California Gurls.mp3", "assets/Cal.jpg"),
-                song("Never Gonna Give U Up", "Rick Astley", "music/Never Gonna Give You Up.mp3", "assets/rick.jpg"),
-                song("Crank That", "Soulja Boy", "music/Crank That.mp3", "assets/SB.jpg"),
-                song("Stand by me", "Ben King", "music/Stand by me.mp3", "assets/Stan.jpg"),
-                song("Steve's Lava", "Mojang", "music/Steve's Lava Chicken.mp3", "assets/MM.jpg"),
-                song("Murder business", "Young Boy", "music/Murder business -YoungBoy.mp3", "assets/YB.jpg"),
-                song("Hot Now", "Young Boy", "music/Hot Now -YoungBoy.mp3", "assets/YB2.jpg")
-            ],
-            tupac: [
-                song("Bomb First", "2Pac", "music/Bomb First (My Second Reply).mp3", "assets/2pac.jpg"),
-                song("Can_t C Me", "2Pac", "music/Can_t C Me.mp3", "assets/2pac.jpg"),
-                song("Definition Of A Thug Nigga", "2Pac", "music/Definition Of A Thug Nigga.mp3", "assets/2pac.jpg"),
-                song("Ambitionz Az A Ridah", "2Pac", "music/Ambitionz Az A Ridah.mp3", "assets/2pac.jpg"),
-                song("Dear Mama", "2Pac", "music/Dear Mama.mp3", "assets/2pac.jpg"),
-                song("All Eyez On Me", "2Pac", "music/All Eyez On Me (ft. Big Syke).mp3", "assets/2pac.jpg")
-            ]
-        };
-        const allSongs = [...playlists.global, ...playlists.tupac];
+        const playlists = Object.fromEntries(playlistCatalog.map((playlist) => [playlist.id, buildPlaylistSongs(playlist)]));
+        const allSongs = Object.values(playlists).flat();
         const audio = new Audio();
         const $ = (id) => document.getElementById(id);
         const playBtn = $("play");
@@ -170,6 +138,14 @@
         let saved = JSON.parse(localStorage.getItem("snoopys-saved") || "[]");
         let userPlaylists = JSON.parse(localStorage.getItem("snoopys-playlists") || "[]");
         const savedVolume = Number(localStorage.getItem("snoopys-volume"));
+
+        function renderPlaylistCards() {
+            $("playlistCards").innerHTML = playlistCatalog.map((playlist) => `<div class="card" data-playlist-card="${playlist.id}"><img src="${playlist.cover || "assets/EX.jpg"}" class="card-img" alt="${playlist.name} playlist"><p class="card-title">${playlist.name}</p><p class="card-info">${playlist.description || `${playlist.songs.length} songs`}</p></div>`).join("");
+            document.querySelectorAll("[data-playlist-card]").forEach((card) => card.addEventListener("click", () => {
+                const playlist = playlistCatalog.find((item) => item.id === card.dataset.playlistCard);
+                renderPlaylistPage(playlist.name, playlists[playlist.id], playlist.cover);
+            }));
+        }
 
         function formatTime(value) {
             if (!Number.isFinite(value)) return "0:00";
@@ -401,8 +377,6 @@
         audio.addEventListener("ended", updatePlayingRows);
         audio.addEventListener("ended", () => repeat ? (audio.currentTime = 0, playSong()) : nextSong());
         document.addEventListener("keydown", (event) => { if (event.target.matches("input")) return; if (event.code === "Space") { event.preventDefault(); audio.paused ? playSong() : pauseSong(); } if (event.code === "ArrowRight") audio.currentTime = Math.min(audio.duration || 0, audio.currentTime + 5); if (event.code === "ArrowLeft") audio.currentTime = Math.max(0, audio.currentTime - 5); if (event.key.toLowerCase() === "m") $("muteBtn").click(); });
-        $("global").addEventListener("click", () => renderPlaylistPage("Top 50 - Global", playlists.global, "assets/card1img.jpeg"));
-        $("tupac").addEventListener("click", () => renderPlaylistPage("2Pac", playlists.tupac, "assets/2pac.jpg"));
         function openPlaylistDialog() { $("playlistDialog").hidden = false; $("playlistName").focus(); }
         function closePlaylistDialog() { $("playlistDialog").hidden = true; $("playlistForm").reset(); }
         function createPlaylist(event) {
@@ -440,6 +414,7 @@
         audio.volume = Number.isFinite(savedVolume) && savedVolume >= 0 ? savedVolume / 100 : 0.5;
         $("volume").value = Number.isFinite(savedVolume) && savedVolume >= 0 ? savedVolume : 50;
         paintVolume($("volume").value);
+        renderPlaylistCards();
         loadSong(0);
         renderLibrary();
         renderQueue();
