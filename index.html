@@ -109,6 +109,18 @@
         </form>
     </div>
 
+    <div id="passwordDialog" class="playlist-dialog" hidden>
+        <form id="passwordForm" class="playlist-form">
+            <button type="button" id="cancelPassword" class="dialog-close" aria-label="Close">&times;</button>
+            <span class="eyebrow">Protected playlist</span>
+            <h2 id="passwordPlaylistName">Enter password</h2>
+            <label for="playlistPassword">Password</label>
+            <input id="playlistPassword" type="password" required autocomplete="off">
+            <p id="passwordMessage" class="empty-state" hidden>Incorrect password.</p>
+            <button class="badge" type="submit">Unlock</button>
+        </form>
+    </div>
+
     <script>
         const loader = document.getElementById("loader");
         if (loader) {
@@ -138,13 +150,44 @@
         let saved = JSON.parse(localStorage.getItem("snoopys-saved") || "[]");
         let userPlaylists = JSON.parse(localStorage.getItem("snoopys-playlists") || "[]");
         const savedVolume = Number(localStorage.getItem("snoopys-volume"));
+        let pendingProtectedPlaylist = null;
 
         function renderPlaylistCards() {
             $("playlistCards").innerHTML = playlistCatalog.map((playlist) => `<div class="card" data-playlist-card="${playlist.id}"><img src="${playlist.cover || "assets/EX.jpg"}" class="card-img" alt="${playlist.name} playlist"><p class="card-title">${playlist.name}</p><p class="card-info">${playlist.description || `${playlist.songs.length} songs`}</p></div>`).join("");
             document.querySelectorAll("[data-playlist-card]").forEach((card) => card.addEventListener("click", () => {
                 const playlist = playlistCatalog.find((item) => item.id === card.dataset.playlistCard);
-                renderPlaylistPage(playlist.name, playlists[playlist.id], playlist.cover);
+                openPlaylist(playlist);
             }));
+        }
+
+        function openPlaylist(playlist) {
+            if (playlist.privacy === "password" && sessionStorage.getItem(`playlist-unlocked-${playlist.id}`) !== "true") {
+                pendingProtectedPlaylist = playlist;
+                $("passwordPlaylistName").textContent = playlist.name;
+                $("playlistPassword").value = "";
+                $("passwordMessage").hidden = true;
+                $("passwordDialog").hidden = false;
+                $("playlistPassword").focus();
+                return;
+            }
+            renderPlaylistPage(playlist.name, playlists[playlist.id], playlist.cover);
+        }
+
+        function closePasswordDialog() {
+            $("passwordDialog").hidden = true;
+            pendingProtectedPlaylist = null;
+        }
+
+        function unlockPlaylist(event) {
+            event.preventDefault();
+            if (!pendingProtectedPlaylist || $("playlistPassword").value !== pendingProtectedPlaylist.password) {
+                $("passwordMessage").hidden = false;
+                return;
+            }
+            sessionStorage.setItem(`playlist-unlocked-${pendingProtectedPlaylist.id}`, "true");
+            const playlist = pendingProtectedPlaylist;
+            closePasswordDialog();
+            renderPlaylistPage(playlist.name, playlists[playlist.id], playlist.cover);
         }
 
         function formatTime(value) {
@@ -396,6 +439,9 @@
         $("saveForm").addEventListener("submit", saveToPlaylist);
         $("cancelSave").addEventListener("click", closeSaveDialog);
         $("saveDialog").addEventListener("click", (event) => { if (event.target === $("saveDialog")) closeSaveDialog(); });
+        $("passwordForm").addEventListener("submit", unlockPlaylist);
+        $("cancelPassword").addEventListener("click", closePasswordDialog);
+        $("passwordDialog").addEventListener("click", (event) => { if (event.target === $("passwordDialog")) closePasswordDialog(); });
         document.addEventListener("click", (event) => { if (!event.target.closest(".more-button") && !event.target.closest(".row-menu")) document.querySelectorAll(".row-menu.open").forEach((menu) => menu.classList.remove("open")); });
         $("fullscreenBtn").addEventListener("click", async () => {
             try {

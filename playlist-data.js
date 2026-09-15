@@ -1,7 +1,7 @@
 /*
  * Static playlist catalog.
  * GitHub Pages cannot enumerate folders, so each playlist lists its song metadata here.
- * Privacy is metadata only for now; public repository files are still directly accessible.
+ * Passwords in this static demo are metadata only; public repository files are still directly accessible.
  */
 const playlistCatalog = [
     {
