@@ -184,7 +184,7 @@
                 $("playlistPassword").focus();
                 return;
             }
-            renderPlaylistPage(playlist.name, playlists[playlist.id], playlist.cover);
+            renderPlaylistPage(playlist.name, playlists[playlist.id], playlist.cover, playlist);
         }
 
         function closePasswordDialog() {
@@ -202,7 +202,7 @@
             sessionStorage.setItem(`playlist-unlocked-${pendingProtectedPlaylist.id}`, "true");
             const playlist = pendingProtectedPlaylist;
             closePasswordDialog();
-            renderPlaylistPage(playlist.name, playlists[playlist.id], playlist.cover);
+            renderPlaylistPage(playlist.name, playlists[playlist.id], playlist.cover, playlist);
         }
 
         function formatTime(value) {
@@ -294,17 +294,22 @@
             menu.style.top = `${Math.max(8, top)}px`;
         }
 
-        function renderPlaylistPage(name, songs, coverImage) {
+        function isPlaylistLocked(playlist) {
+            return Boolean(playlist && playlist.privacy === "password" && sessionStorage.getItem(`playlist-unlocked-${playlist.id}`) !== "true");
+        }
+
+        function renderPlaylistPage(name, songs, coverImage, playlist = null) {
               $("homeContent").style.display = "none";
               $("homeView").style.display = "none";
             $("searchPage").classList.remove("visible");
+            const locked = isPlaylistLocked(playlist);
             const page = $("playlistPage");
             page.classList.add("visible");
-            page.innerHTML = `<div class="playlist-hero"><img src="${coverImage || "assets/EX.jpg"}" alt=""><div><button class="back-button" id="backHome"><i class="fa-solid fa-arrow-left"></i> Home</button><span class="eyebrow">Playlist</span><h1>${name}</h1><p>${songs.length} songs in this collection</p></div></div><div class="playlist-track-list">${songs.map((song, index) => `<div class="playlist-song ${song.src === currentPlaylist[currentSong]?.src && !audio.paused ? "is-playing" : ""}" data-track-index="${index}"><button class="song-main"><span class="track-number">${index + 1}</span><span class="track-copy"><strong>${song.title}</strong><small>${song.artist}</small></span><span class="equalizer" aria-hidden="true"><i></i><i></i><i></i></span><i class="fa-solid fa-play"></i></button><button class="more-button" data-menu="${index}" aria-label="More options"><i class="fa-solid fa-ellipsis"></i></button><div class="row-menu"><button data-action="remove-song" data-index="${index}">Remove from playlist</button><button data-action="queue-song" data-index="${index}">Add to queue</button></div></div>`).join("")}</div>`;
+            page.innerHTML = `<div class="playlist-hero"><img src="${coverImage || "assets/EX.jpg"}" alt=""><div><button class="back-button" id="backHome"><i class="fa-solid fa-arrow-left"></i> Home</button><span class="eyebrow">Playlist</span><h1>${name}</h1><p>${songs.length} songs in this collection</p></div></div><div class="playlist-track-list">${songs.map((song, index) => `<div class="playlist-song ${song.src === currentPlaylist[currentSong]?.src && !audio.paused ? "is-playing" : ""}" data-track-index="${index}"><button class="song-main"><span class="track-number">${index + 1}</span><span class="track-copy"><strong>${song.title}</strong><small>${song.artist}</small></span><span class="equalizer" aria-hidden="true"><i></i><i></i><i></i></span><i class="fa-solid fa-play"></i></button><button class="more-button" data-menu="${index}" aria-label="More options"><i class="fa-solid fa-ellipsis"></i></button><div class="row-menu">${locked ? "" : `<button data-action="remove-song" data-index="${index}">Remove from playlist</button>`}<button data-action="queue-song" data-index="${index}">Add to queue</button></div></div>`).join("")}</div>`;
             $("backHome").addEventListener("click", showHome);
             page.querySelectorAll(".song-main").forEach((button, index) => button.addEventListener("click", () => playTrack(songs[index], songs)));
             page.querySelectorAll("[data-menu]").forEach((button) => button.addEventListener("click", (event) => { event.stopPropagation(); toggleRowMenu(button); }));
-            page.querySelectorAll("[data-action]").forEach((button) => button.addEventListener("click", () => handleRowAction(button.dataset.action, Number(button.dataset.index), songs, name)));
+            page.querySelectorAll("[data-action]").forEach((button) => button.addEventListener("click", () => handleRowAction(button.dataset.action, Number(button.dataset.index), songs, name, playlist)));
         }
 
         function showHome() {
@@ -327,7 +332,7 @@
             document.querySelectorAll("[data-playlist]").forEach((button) => button.addEventListener("click", () => {
                 const playlist = userPlaylists[Number(button.dataset.playlist)];
                 if (!playlist.songs.length) return;
-                renderPlaylistPage(playlist.name, playlist.songs, playlist.songs[0].cover);
+                renderPlaylistPage(playlist.name, playlist.songs, playlist.songs[0].cover, playlist);
             }));
             document.querySelectorAll("[data-library-menu]").forEach((button) => button.addEventListener("click", (event) => { event.stopPropagation(); toggleRowMenu(button); }));
             document.querySelectorAll("#libraryList [data-action]").forEach((button) => button.addEventListener("click", () => handleLibraryAction(button.dataset.action, Number(button.dataset.index))));
@@ -343,15 +348,16 @@
             renderQueue();
         }
 
-        function handleRowAction(action, index, songs, name) {
+        function handleRowAction(action, index, songs, name, playlist = null) {
             if (action === "queue-song") { queue.push(songs[index]); renderQueue(); return; }
             if (action !== "remove-song") return;
-            const playlist = userPlaylists.find((item) => item.name === name);
-            if (!playlist) return;
-            playlist.songs = playlist.songs.filter((song) => song.src !== songs[index].src);
+            if (isPlaylistLocked(playlist)) return;
+            const targetPlaylist = userPlaylists.find((item) => item.name === name) || playlist;
+            if (!targetPlaylist) return;
+            targetPlaylist.songs = targetPlaylist.songs.filter((song) => song.src !== songs[index].src);
             localStorage.setItem("snoopys-playlists", JSON.stringify(userPlaylists));
             renderLibrary();
-            if (playlist.songs.length) renderPlaylistPage(playlist.name, playlist.songs, playlist.songs[0].cover);
+            if (targetPlaylist.songs.length) renderPlaylistPage(targetPlaylist.name, targetPlaylist.songs, targetPlaylist.songs[0].cover, targetPlaylist);
             else showHome();
         }
 
@@ -400,6 +406,10 @@
             event.preventDefault();
             const playlist = userPlaylists[Number($("savePlaylist").value)];
             const song = currentPlaylist[currentSong];
+            if (playlist && isPlaylistLocked(playlist)) {
+                closeSaveDialog();
+                return;
+            }
             if (playlist && !playlist.songs.some((item) => item.src === song.src)) {
                 playlist.songs.push(song);
                 localStorage.setItem("snoopys-playlists", JSON.stringify(userPlaylists));
