@@ -36,6 +36,28 @@ const playlistCatalog = [
             { title: "Dear Mama", artist: "2Pac", file: "Dear Mama.mp3" },
             { title: "All Eyez On Me", artist: "2Pac", file: "All Eyez On Me (ft. Big Syke).mp3" }
         ]
+    },
+    {
+        id: "robert",
+        name: "TopOppGen",
+        description: "TopOppGen songs for Robert Reagan.",
+        folder: "music/robert/",
+        cover: "assets/TopOppGen.jpg",
+        privacy: "private",
+        songs: [
+            { title: "0%", artist: "TopOppGen", file: "0%.mp3" },
+            { title: "affectionate", artist: "TopOppGen", file: "affectionate.mp3" },
+            { title: "blank", artist: "TopOppGen", file: "blank.mp3" },
+            { title: "blank", artist: "TopOppGen", file: "blank.mp3" },
+            { title: "blank", artist: "TopOppGen", file: "blank.mp3" },
+            { title: "blank", artist: "TopOppGen", file: "blank.mp3" },
+            { title: "blank", artist: "TopOppGen", file: "blank.mp3" },
+            { title: "blank", artist: "TopOppGen", file: "blank.mp3" },
+            { title: "blank", artist: "TopOppGen", file: "blank.mp3" },
+            { title: "blank", artist: "TopOppGen", file: "blank.mp3" },
+            { title: "blank", artist: "TopOppGen", file: "blank.mp3" },
+            { title: "blank", artist: "TopOppGen", file: "blank.mp3" },
+        ]
     }
 ];
 
