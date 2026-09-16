@@ -160,9 +160,23 @@
             }));
         }
 
+        function updateSearchAccess() {
+            const searchInput = $("searchInput");
+            const searchNav = document.querySelector(".search-nav");
+            const locked = Boolean(pendingProtectedPlaylist);
+            if (searchInput) {
+                searchInput.disabled = locked;
+                searchInput.setAttribute("aria-disabled", String(locked));
+            }
+            if (searchNav) {
+                searchNav.style.display = locked ? "none" : "";
+            }
+        }
+
         function openPlaylist(playlist) {
             if (playlist.privacy === "password" && sessionStorage.getItem(`playlist-unlocked-${playlist.id}`) !== "true") {
                 pendingProtectedPlaylist = playlist;
+                updateSearchAccess();
                 $("passwordPlaylistName").textContent = playlist.name;
                 $("playlistPassword").value = "";
                 $("passwordMessage").hidden = true;
@@ -176,6 +190,7 @@
         function closePasswordDialog() {
             $("passwordDialog").hidden = true;
             pendingProtectedPlaylist = null;
+            updateSearchAccess();
         }
 
         function unlockPlaylist(event) {
@@ -352,18 +367,20 @@
         }
 
         function showSearchResults(query) {
-            const results = allSongs.filter((song) => `${song.title} ${song.artist}`.toLowerCase().includes(query.toLowerCase()));
+            const visibleSongs = allSongs.filter((song) => song.privacy !== "password" || sessionStorage.getItem(`playlist-unlocked-${song.playlistId}`) === "true");
+            const results = visibleSongs.filter((song) => `${song.title} ${song.artist}`.toLowerCase().includes(query.toLowerCase()));
             const markup = query ? results.map((song) => `<button class="result" data-src="${song.src}"><img src="${song.cover || "assets/EX.jpg"}" alt=""><span><strong>${song.title}</strong><small>${song.artist}</small></span></button>`).join("") : "<p class='empty-state'>Type a song or artist to start searching.</p>";
             $("searchPageResults").innerHTML = markup;
             document.querySelectorAll("[data-src]").forEach((button) => button.addEventListener("click", () => {
-                playTrack(allSongs.find((song) => song.src === button.dataset.src), allSongs);
+                playTrack(visibleSongs.find((song) => song.src === button.dataset.src), visibleSongs);
                 $("searchInput").value = "";
                 showSearchResults("");
             }));
         }
 
         function openSearchPage() {
-                $("homeContent").style.display = "none";
+            if (pendingProtectedPlaylist) return;
+            $("homeContent").style.display = "none";
             $("homeView").style.display = "none";
             $("playlistPage").classList.remove("visible");
             $("searchPage").classList.add("visible");

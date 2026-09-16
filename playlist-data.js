@@ -164,6 +164,8 @@ function buildPlaylistSongs(playlist) {
         title: track.title,
         artist: track.artist,
         src: `${folder}${track.file}`,
-        cover: track.cover || playlist.cover || "assets/EX.jpg"
+        cover: track.cover || playlist.cover || "assets/EX.jpg",
+        playlistId: playlist.id,
+        privacy: playlist.privacy || "public"
     }));
 }
