@@ -90,8 +90,7 @@ const playlistCatalog = [
         description: "TopOppGen songs for Robert Reagan.",
         folder: "music/robert/",
         cover: "assets/Topoppgen.jpg",
-        privacy: "password",
-        password: "7392",
+        privacy: "public",
         songs: [
             { title: "0%", artist: "TopOppGen", file: "0.mp3" },
             { title: "affectionate", artist: "TopOppGen", file: "affectionate.mp3" },
