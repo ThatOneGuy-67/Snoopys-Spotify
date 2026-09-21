@@ -161,8 +161,7 @@ const playlistCatalog = [
         description: "Braden's playlist.",
         folder: "music/braden/",
         cover: "assets/braden.jpg",
-        privacy: "password",
-        password: "5837",
+        privacy: "public",
         songs: [
             { title: "Almost Gone", artist: "Gavin Adcock", file: "Almost Gone.mp3" },
             { title: "Bad State of Mind", artist: "Treaty Oak Revival", file: "Bad State of Mind.mp3" },
